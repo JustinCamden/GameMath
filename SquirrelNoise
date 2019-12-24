@@ -1,0 +1,45 @@
+/*
+  squirrel3
+  ~~~~~~~~~
+  Provides a noise function which is fast and had good distribution.  It was
+  introduced by Squirrel Eiserloh at 'Math for Game Programmers: Noise-based
+  RNG', GDC17.
+  :copyright: (c) 2017 by Heungsub Lee.
+  :license: BSD
+*/
+
+uint32_t NOISE1 = 0xb5297a4d;  //# 0b0110'1000'1110'0011'0001'1101'1010'0100
+uint32_t NOISE2 = 0x68e31da4; // # 0b1011'0101'0010'1001'0111'1010'0100'1101
+uint32_t NOISE3 = 0x1b56c4e9; // # 0b0001'1011'0101'0110'1100'0100'1110'1001
+uint32_t CAP  = 1 <<32;
+
+uint32_t Squirrel3Noise(uint32_t n, uint32_t seed)
+{
+    n *= NOISE1;
+    n += seed;
+    n ^= n >> 8;
+    n += NOISE2;
+    n ^= n << 8;
+    n *= NOISE3;
+    n ^= n >> 8;
+    
+    return n % CAP;
+}
+
+class Squirrel3Random
+{
+    
+public:
+    Squirrel3Random(uint32_t inSeed = 0) : seed(inSeed) {}
+    uint32_t Random()
+    {
+        uint32_t oldN = n;
+        n = n + 1;
+        return Squirrel3Noise(oldN, seed);
+    }
+    
+private:
+    uint32_t seed;
+    uint32_t n = 0;
+    
+};
