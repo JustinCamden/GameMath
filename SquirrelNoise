@@ -28,7 +28,6 @@ uint32_t Squirrel3Noise(uint32_t n, uint32_t seed)
 
 class Squirrel3Random
 {
-    
 public:
     Squirrel3Random(uint32_t inSeed = 0) : seed(inSeed) {}
     uint32_t Random()
